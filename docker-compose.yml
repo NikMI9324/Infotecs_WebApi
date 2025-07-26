@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_tz_container
+    ports: 
+     - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Infotecs
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+  infotecs:
+    build:
+      context: .
+      dockerfile: ./Infotecs_WebApi.Web/Dockerfile
+    ports:
+      - "5071:8080"
+    depends_on:
+      - postgres
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=Infotecs;Username=postgres;Password=postgres
+volumes:
+  postgres_data:
+    
+     
